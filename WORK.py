@@ -50,7 +50,7 @@ def generate_random_trips():
     cities = ["Paryż", "Rzym", "Berlin", "Londyn", "Madryd", "Praga", "Wiedeń", "Amsterdam", "Barcelona"]
     trips = []
     for city in cities:
-        price = random.randint(10, 100) * 1000
+        price = random.randint(10, 100) * 100
         date = (datetime.now() + timedelta(days=random.randint(1, 30))).strftime("%d.%m.%Y")
         description = city_description.get(city)
         trips.append(Trip(city, date, price, description))
