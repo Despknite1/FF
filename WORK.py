@@ -63,21 +63,38 @@ def generate_random_trips():
 def show_planned_trips():
     planned_window = tk.Toplevel()
     planned_window.title("My Planned Trips")
-    planned_window.geometry("800x600")
+    planned_window.geometry("800x00")
 
     if not planned_trips:
         tk.Label(planned_window, text="No trips planned yet.", font=("Helvetica", 14)).pack(pady=20)
         return
 
+    # Tworzenie kontenera z siatką
+    trips_frame = tk.Frame(planned_window)
+    trips_frame.pack(padx=10, pady=10, fill="both", expand=True)
+
+    # Parametry siatki
+    columns = 3  # Liczba kolumn w układzie
+    row, col = 0, 0
+
     for idx, trip in enumerate(planned_trips):
-        frame = tk.Frame(planned_window, relief="solid", borderwidth=1)
-        frame.pack(pady=5, padx=10, fill="x")
+        frame = tk.Frame(trips_frame, relief="solid", borderwidth=1, width=300, height=200)
+        frame.grid(row=row, column=col, padx=10, pady=10, sticky="nsew")
 
-        tk.Label(frame, text=f"{idx + 1}. {trip.city} - {trip.date}", font=("Helvetica", 12, "bold")).pack(anchor="w")
+        # Informacje o wycieczce w każdej komórce
+        tk.Label(frame, text=f"{idx + 1}. {trip.city}", font=("Helvetica", 12, "bold")).pack(anchor="w", pady=5)
+        tk.Label(frame, text=f"Date: {trip.date}", font=("Helvetica", 10)).pack(anchor="w")
         tk.Label(frame, text=f"Price: ${trip.price}", font=("Helvetica", 10)).pack(anchor="w")
-        tk.Label(frame, text=f"Description: {trip.description}", font=("Helvetica", 10), wraplength=400, justify="left").pack(anchor="w")
+        tk.Label(frame, text=f"Description: {trip.description}", font=("Helvetica", 10), wraplength=250).pack(anchor="w")
 
-        tk.Button(frame, text="Cancel Trip", command=lambda t=trip, f=frame: cancel_trip(t, f), bg="red", fg="white").pack(anchor="e")
+        # Przycisk anulowania
+        tk.Button(frame, text="Cancel Trip", command=lambda t=trip, f=frame: cancel_trip(t, f), bg="red", fg="white").pack(pady=5, anchor="e")
+
+        # Przesuwanie do następnej komórki w siatce
+        col += 1
+        if col >= columns:  # Jeśli osiągniemy maksymalną liczbę kolumn, przechodzimy do nowego rzędu
+            col = 0
+            row += 1
 
 #Cancel
 def cancel_trip(trip, frame):
