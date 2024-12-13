@@ -6,22 +6,23 @@ from datetime import datetime, timedelta
 import random
 from io import BytesIO
 
+#Creating
 class Trip:
     def __init__(self, city, date, price, description):
         self.city = city
         self.date = date
         self.price = price
         self.description = description
-
+#Comparison of objects
     def __eq__(self, other):
         return self.city == other.city and self.date == other.date
-
+#For set or dict
     def __hash__(self):
         return hash((self.city, self.date))
 
 planned_trips = set()
 
-
+#Images
 city_images = {
     "Paryż": "https://a.eu.mktgcdn.com/f/100004519/N2BB4ohwclor2uLoZ7XMHgJmxOZaMOokMdQqqXQAq3s.jpg",
     "Rzym": "https://cdn.britannica.com/16/99616-050-72CD201A/Colosseum-Rome.jpg",
@@ -34,6 +35,7 @@ city_images = {
     "Barcelona": "https://sitgesluxuryrentals.com/wp-content/uploads/2017/05/barcelona1.jpg"
 }
 
+#Miasto i opis
 city_description = {
     "Paryż": "Miasto miłości i światła, słynne z wieży Eiffla, Luwru i romantycznej atmosfery na brzegach Sekwany.Tydzień w 5-giaszdkowym hotelu z basenem i 3 posiłkami dziennie",
     "Rzym": "Wieczne miasto pełne zabytków, takich jak Koloseum, Forum Romanum czy Watykan. Historia na każdym kroku. 3 ekskursje po Rzymie w ciągu wyczieczki",
@@ -46,6 +48,7 @@ city_description = {
     "Barcelona": "Połączenie architektury Gaudiego, plaż i śródziemnomorskiej kuchni. Tętniąca życiem stolica Katalonii."
 }
 
+#Random trips
 def generate_random_trips():
     cities = ["Paryż", "Rzym", "Berlin", "Londyn", "Madryd", "Praga", "Wiedeń", "Amsterdam", "Barcelona"]
     trips = []
@@ -56,6 +59,7 @@ def generate_random_trips():
         trips.append(Trip(city, date, price, description))
     return trips
 
+#Planned
 def show_planned_trips():
     planned_window = tk.Toplevel()
     planned_window.title("My Planned Trips")
@@ -75,6 +79,7 @@ def show_planned_trips():
 
         tk.Button(frame, text="Cancel Trip", command=lambda t=trip, f=frame: cancel_trip(t, f), bg="red", fg="white").pack(anchor="e")
 
+#Cancel
 def cancel_trip(trip, frame):
     planned_trips.remove(trip)
     frame.destroy()
@@ -133,11 +138,13 @@ def create_app():
 
     root.mainloop()
 
+#Getting
 def get_city_image(city):
     url = city_images.get(city)
+#If not image
     if not url:
         return None
-
+#Change for Tkinker
     try:
         req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
         with urlopen(req) as response:
