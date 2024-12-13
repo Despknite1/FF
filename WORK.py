@@ -22,6 +22,21 @@ class Trip:
 
 planned_trips = set()
 
+def load_planned_trips(file_name):
+    try:
+        with open(file_name, 'r', encoding='utf-8') as file:
+            for line in file:
+                city, date, price, description = line.strip().split(', ', 3)
+                price = int(price)
+                # Create Trip object and add to the set
+                trip = Trip(city, date, price, description)
+                planned_trips.add(trip)
+    except FileNotFoundError:
+        # If the file is not found, just continue without loading trips
+        pass 
+
+load_planned_trips("planned_trips.txt")
+
 #Images
 city_images = {
     "Paryż": "https://a.eu.mktgcdn.com/f/100004519/N2BB4ohwclor2uLoZ7XMHgJmxOZaMOokMdQqqXQAq3s.jpg",
@@ -59,11 +74,16 @@ def generate_random_trips():
         trips.append(Trip(city, date, price, description))
     return trips
 
+def save_to_file(file_name):
+    with open(file_name, 'w', encoding='utf-8') as file:
+        for trip in planned_trips:
+            file.write(f"{trip.city}, {trip.date}, {trip.price}, {trip.description}\n")
+
 #Planned
 def show_planned_trips():
     planned_window = tk.Toplevel()
     planned_window.title("My Planned Trips")
-    planned_window.geometry("800x00")
+    planned_window.geometry("800x600")
 
     if not planned_trips:
         tk.Label(planned_window, text="No trips planned yet.", font=("Helvetica", 14)).pack(pady=20)
@@ -101,6 +121,8 @@ def cancel_trip(trip, frame):
     planned_trips.remove(trip)
     frame.destroy()
     messagebox.showinfo("Cancelled", f"Trip to {trip.city} has been cancelled.")
+
+    save_to_file("planned_trips.txt")
 
 def show_trip_details(trip):
     def reserve_trip():
